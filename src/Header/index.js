@@ -1,15 +1,48 @@
-import './header.css';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { tw } from 'twind';
+import { FaShoppingCart } from 'react-icons/fa';
 
 
 function Header() {
-    return(
-        <header>
-            <Link className='logo' to="/">Delivery</Link>
-            <Link className='login' to="/login">Login</Link>
-        
+    const [isOpen, setIsOpen] = useState(false);
+    
+
+    const toggleMenu = () => setIsOpen(!isOpen);
+    
+
+    return (
+        <header className={tw`bg-gray-900 text-white shadow-md w-full`}>
+            <div className={tw`flex items-center justify-between p-4 container mx-auto`}>
+                {/* Logo */}
+                <Link className={tw`text-3xl font-bold hover:text-blue-400`} to="/">
+                    Delivery
+                </Link>
+
+                {/* Menu hambúrguer para dispositivos móveis */}
+                <button 
+                    className={tw`lg:hidden text-2xl focus:outline-none`} 
+                    onClick={toggleMenu}
+                >
+                    {isOpen ? '✖' : '☰'}
+                </button>
+
+                {/* Navegação */}
+                <nav className={tw`lg:flex lg:space-x-8 ${isOpen ? 'block' : 'hidden'}`}>
+                
+                    <Link className={tw`text-lg hover:text-blue-400`} to="/login">
+                        Login
+                    </Link>
+                    <Link className={tw`text-lg hover:text-blue-400`} to="/about">
+                        About
+                    </Link>
+
+                </nav>
+            </div>
+
+           
         </header>
-    )
+    );
 }
 
 export default Header;
