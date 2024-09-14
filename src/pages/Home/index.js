@@ -127,14 +127,14 @@ function OrderSection({ onAddToCart }) {
     );
 }
 
-
-
-
 // Componente principal da Home
 function Home() {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [cart, setCart] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSupportPageOpen, setIsSupportPageOpen] = useState(false);
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState('');
 
     useEffect(() => {
         // Troca o slide a cada 3 segundos
@@ -150,6 +150,21 @@ function Home() {
 
     const calculateTotal = () => {
         return cart.reduce((total, item) => total + parseFloat(item.price.replace('R$ ', '').replace(',', '.')), 0).toFixed(2);
+    };
+
+    const handleCheckout = () => {
+        // Lógica de finalização de pedido, como enviar o pedido para um servidor
+        toast.success('Pedido finalizado com sucesso!');
+        setCart([]); // Limpar o carrinho após o checkout
+        setIsModalOpen(false); // Fechar o modal após o checkout
+    };
+
+    const handleAddComment = () => {
+        if (newComment.trim()) {
+            setComments((prevComments) => [...prevComments, newComment]);
+            setNewComment('');
+            toast.success('Comentário adicionado!');
+        }
     };
 
     return (
@@ -179,7 +194,7 @@ function Home() {
             {/* Seção de pedidos */}
             <OrderSection onAddToCart={handleAddToCart} />
 
-            {/* Botão para abrir o modal do carrinho, agora com ícone */}
+            {/* Botão para abrir o modal do carrinho */}
             <button 
                 onClick={() => setIsModalOpen(true)}
                 className={tw`fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition duration-300 flex items-center justify-center`}>
@@ -188,9 +203,6 @@ function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.5 6h13l-1.5-6M9 21h6" />
                 </svg>
             </button>
-
-
-
 
             {/* Modal do carrinho */}
             {isModalOpen && (
@@ -210,15 +222,21 @@ function Home() {
                             <span>R$ {calculateTotal()}</span>
                         </div>
                         <button
+                            onClick={handleCheckout}
+                            className={tw`w-full py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300 mb-2`}>
+                            Finalizar Pedido
+                        </button>
+                        <button
                             onClick={() => setIsModalOpen(false)}
                             className={tw`w-full py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300`}>
                             Fechar
                         </button>
                     </div>
                 </div>
-            )}
+            )}    
+            
         </>
     );
 }
 
-export default Home; 
+export default Home;

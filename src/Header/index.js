@@ -33,7 +33,7 @@ function Header() {
                     <Link className={tw`text-lg hover:text-blue-400`} to="/login">
                         Login
                     </Link>
-                    <Link className={tw`text-lg hover:text-blue-400`} to="/about">
+                    <Link className={tw`text-lg hover:text-blue-400`} to="/suporte">
                         About
                     </Link>
 
