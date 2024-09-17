@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { tw } from 'twind';
-import { FaShoppingCart } from 'react-icons/fa';
+import { FaShoppingCart, FaUser, FaHeadset } from 'react-icons/fa';
 
 
 function Header() {
@@ -12,11 +12,11 @@ function Header() {
     
 
     return (
-        <header className={tw`bg-gray-900 text-white shadow-md w-full`}>
+        <header className={tw`bg-[#FF4C4C] text-white shadow-md w-full`}>
             <div className={tw`flex items-center justify-between p-4 container mx-auto`}>
                 {/* Logo */}
                 <Link className={tw`text-3xl font-bold hover:text-blue-400`} to="/">
-                    Delivery
+                DelivExpress
                 </Link>
 
                 {/* Menu hambúrguer para dispositivos móveis */}
@@ -30,11 +30,11 @@ function Header() {
                 {/* Navegação */}
                 <nav className={tw`lg:flex lg:space-x-8 ${isOpen ? 'block' : 'hidden'}`}>
                 
-                    <Link className={tw`text-lg hover:text-blue-400`} to="/login">
-                        Login
+                    <Link className={tw`text-lg hover:text-blue-400 flex items-center`} to="/login">
+                        <FaUser className={tw`mr-2`} /> {/* Ícone de usuário */}
                     </Link>
-                    <Link className={tw`text-lg hover:text-blue-400`} to="/suporte">
-                        About
+                    <Link className={tw`text-lg hover:text-blue-400 flex items-center`} to="/suporte">
+                        <FaHeadset className={tw`mr-2`} /> {/* Ícone de suporte */}
                     </Link>
 
                 </nav>

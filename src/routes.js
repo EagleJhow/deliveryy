@@ -3,6 +3,7 @@ import Header from './Header';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Support from './pages/Suporte/suporte';
+import Register from './pages/Registro/registro';
 
 
 function RoutesApp(){
@@ -15,6 +16,7 @@ function RoutesApp(){
             
             <Route path='/' element={ <Home/>}/>
             <Route path='/login' element={ <Login/>}/>
+            <Route path='/registro' element={<Register/>}/>
             <Route path='/suporte' element={ <Support/> }/>
 
 

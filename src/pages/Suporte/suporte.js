@@ -41,16 +41,7 @@ function SupportPage() {
         <div className={tw`p-4 max-w-xl mx-auto`}>
             <h1 className={tw`text-2xl font-bold mb-4`}>Suporte</h1>
 
-            {/* Seção de Perguntas Frequentes (FAQ) */}
-            <section className={tw`mb-6`}>
-                <h2 className={tw`text-xl font-semibold mb-3`}>FAQ</h2>
-                <div className={tw`space-y-2`}>
-                    <div className={tw`bg-gray-100 p-3 rounded-md shadow-sm`}>
-                        <h3 className={tw`text-md font-semibold`}>Como resetar minha senha?</h3>
-                        <p className={tw`text-gray-700 text-sm`}>Clique em "Esqueci minha senha" na página de login e siga as instruções.</p>
-                    </div>
-                </div>
-            </section>
+            
 
             {/* Seção de Formulário de Contato */}
             <section className={tw`mb-6`}>

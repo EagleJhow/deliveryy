@@ -9,8 +9,8 @@ setup({
   theme: {
     extend: {
       colors: {
-        primary: '#282c34',
-        linkColor: '#61dafb',
+        primary: '#fff',
+        linkColor: '#007BFF',
       },
     },
   },
