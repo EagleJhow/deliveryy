@@ -16,7 +16,7 @@ function Header() {
             <div className={tw`flex items-center justify-between p-4 container mx-auto`}>
                 {/* Logo */}
                 <Link className={tw`text-3xl font-bold hover:text-blue-400`} to="/">
-                DelivExpress
+                Tasty Spot
                 </Link>
 
                 {/* Menu hambúrguer para dispositivos móveis */}

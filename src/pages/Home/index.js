@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import OrderSection from './OrderSection';
 import { toast } from 'react-toastify';
 import { tw } from 'twind';
+import { FaTimes, FaArrowLeft} from 'react-icons/fa';
 
 // Array de imagens para o slideshow
 const slides = [
@@ -14,6 +15,7 @@ function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [cart, setCart] = useState([]); // Estado do carrinho
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false); // Estado para controle do modal de pagamento
 
   // Função para trocar o slide automaticamente a cada 3 segundos
   useEffect(() => {
@@ -70,9 +72,15 @@ function Home() {
 
   // Função para finalizar o pedido
   const handleCheckout = () => {
-    toast.success('Pedido finalizado com sucesso!');
-    setCart([]); // Limpar o carrinho após o checkout
-    setIsModalOpen(false); // Fechar o modal após o checkout
+    setIsPaymentOpen(true); // Mostra as opções de pagamento ao clicar em "Finalizar Pedido"
+  };
+
+  // Função para lidar com a seleção do método de pagamento
+  const handlePayment = (method) => {
+    toast.success(`Pagamento com ${method} selecionado!`);
+    setCart([]); // Limpa o carrinho após a seleção do pagamento
+    setIsModalOpen(false); // Fecha o modal do carrinho
+    setIsPaymentOpen(false); // Fecha o modal de pagamento
   };
 
   return (
@@ -89,9 +97,9 @@ function Home() {
 
         {/* Texto sobreposto */}
         <div className={tw`absolute inset-0 flex flex-col items-center justify-center text-center text-white bg-black bg-opacity-30`}>
-          <h1 className={tw`text-4xl font-bold mb-4`}>Bem Vindo ao Delivery</h1>
+          <h1 className={tw`text-4xl font-bold mb-4`}>Bem Vindo ao Tasty Spot</h1>
           <p className={tw`text-lg mb-6`}>
-            Receba suas comidas favoritas no conforto da sua casa – Rápido, fácil e delicioso!
+          Sabor irresistível sem sair de casa. Peça agora!
           </p>
           <a href="#order" className={tw`bg-[#FFA500] px-6 py-3 rounded-lg text-lg font-semibold hover:bg-[#FF8C00] transition duration-300`}>
             Fazer pedido!
@@ -115,7 +123,13 @@ function Home() {
       {/* Modal do carrinho */}
       {isModalOpen && (
         <div className={tw`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center`}>
-          <div className={tw`bg-white p-6 rounded-lg shadow-lg max-w-md w-full`}>
+          <div className={tw`bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative`}>
+           {/* Botão de fechar */}
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className={tw`absolute top-2 right-2 text-red-500 hover:text-red-700`}>
+              <FaTimes size={24} />
+            </button>
             <h3 className={tw`text-lg font-semibold mb-4`}>Carrinho de Compras</h3>
             <ul className={tw`mb-4`}>
               {cart.map((item, index) => (
@@ -127,7 +141,9 @@ function Home() {
                     <span className={tw`ml-4`}>{item.name}</span>
                     <span>{item.price}</span>
                   </div>
-                  <button onClick={() => removeItem(item.id)} className={tw`text-red-500 hover:underline`}>Remover</button>
+                  <button onClick={() => removeItem(item.id)} className={tw`text-red-500 hover:underline`}>
+                    <FaTimes size={16} />
+                  </button>
                 </li>
               ))}
             </ul>
@@ -146,6 +162,33 @@ function Home() {
           </div>
         </div>
       )}
+
+// No modal de opções de pagamento
+{isPaymentOpen && (
+  <div className={tw`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center`}>
+    <div className={tw`bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative`}>
+      {/* Botão de voltar */}
+      <button
+        onClick={() => setIsPaymentOpen(false)}
+        className={tw`absolute top-2 left-2 text-blue-500 hover:text-blue-700`}
+      >
+        <FaArrowLeft size={24} />
+      </button>
+      <h3 className={tw`text-lg font-semibold mb-4`}>Selecione o método de pagamento</h3>
+      <div className={tw`flex flex-col space-y-4`}>
+        <button onClick={() => handlePayment('Cartão de Crédito')} className={tw`bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300`}>
+          Cartão de Crédito
+        </button>
+        <button onClick={() => handlePayment('Cartão de Débito')} className={tw`bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300`}>
+          Cartão de Débito
+        </button>
+        <button onClick={() => handlePayment('Pix')} className={tw`bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300`}>
+          Pix
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </>
   );
 }
