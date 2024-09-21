@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
 import { tw } from 'twind';
+import { Link } from "react-router-dom";
 
 // Componente de Registro
 const Register = () => {
@@ -64,7 +65,7 @@ const Register = () => {
           </button>
           <div className={tw`mt-4 text-center`}>
             <p className={tw`text-gray-600`}>
-              Já tem uma conta? <a href="#" className={tw`text-blue-500 hover:underline`}>Login</a>
+              Já tem uma conta? <Link to="/login" className={tw`text-blue-500 hover:underline`}>Login</Link>
             </p>
           </div>
         </form>

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
 import { tw } from 'twind';
+import { Link } from "react-router-dom";
+
 
 // Componente de Login
 const Login = () => {
@@ -53,7 +55,7 @@ const Login = () => {
         </button>
           <div className={tw`mt-4 text-center`}>
             <p className={tw`text-gray-600`}>
-              Não tem uma conta? <a href="#" className={tw`text-blue-500 hover:underline`}>Registar</a>
+              Não tem uma conta? <Link to="/registro" className={tw`text-blue-500 hover:underline`}>Registar</Link>
             </p>
           </div>
         </form>
