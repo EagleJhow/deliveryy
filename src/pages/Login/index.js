@@ -2,20 +2,37 @@ import { useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
 import { tw } from 'twind';
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+// Usuários fictícios para autenticação
+const users = {
+  "lanchonet@admin.com": "lanchonet123", // Usuario Admin
+  "jhonatan@gmail.com": "senha123", // Usuario Jhonatan
+  "ryan@gmail.com": "senha123", // Usuario Ryan
+};
 
-// Componente de Login
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Dados de Login:", { username, password });
+    // Verifica se o usuário e a senha estão corretos
+    if (users[username] === password) {
+      console.log("Login bem-sucedido:", { username });
+      setError("");
+      toast.success(`${username} logado com sucesso!`); // Notificação de sucesso
+      // Redirecionar ou fazer algo após o login bem-sucedido
+    } else {
+      setError("Usuário ou senha inválidos");
+    }
   };
 
   return (
     <div className={tw`inset-0 flex items-center justify-center min-h-screen bg-white z-10`}>
+      <ToastContainer />
       <div className={tw`bg-gray-100 p-8 rounded-lg w-full max-w-md z-20`}>
         <h1 className={tw`text-2xl font-bold mb-6 text-center text-gray-700`}>Acesse sua conta</h1>
         <form onSubmit={handleSubmit}>
@@ -41,6 +58,7 @@ const Login = () => {
             />
             <FaLock className={tw`absolute top-3 right-3 text-gray-500`} />
           </div>
+          {error && <div className={tw`text-red-500 mb-4 text-center`}>{error}</div>}
           <div className={tw`flex items-center justify-between mb-6`}>
             <label className={tw`flex items-center mr-4`}>
               <input type="checkbox" className={tw`mr-2`} />
@@ -49,10 +67,10 @@ const Login = () => {
             <a href="#" className={tw`text-blue-500 hover:underline`}>Esqueceu sua senha?</a>
           </div>
           <button 
-          type="submit" 
-          className={tw`w-full py-2 bg-[#FFA500] text-white font-semibold rounded-md hover:bg-[#FF8C00] transition duration-300`}>
-          Login
-        </button>
+            type="submit" 
+            className={tw`w-full py-2 bg-[#FFA500] text-white font-semibold rounded-md hover:bg-[#FF8C00] transition duration-300`}>
+            Login
+          </button>
           <div className={tw`mt-4 text-center`}>
             <p className={tw`text-gray-600`}>
               Não tem uma conta? <Link to="/registro" className={tw`text-blue-500 hover:underline`}>Registar</Link>

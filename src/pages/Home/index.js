@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import OrderSection from './OrderSection';
 import { toast } from 'react-toastify';
 import { tw } from 'twind';
-import { FaTimes, FaArrowLeft, FaCreditCard, FaMoneyBillWave } from 'react-icons/fa';
+import { FaTimes, FaArrowLeft, FaCreditCard, FaMoneyBillWave, FaLock, FaCheckCircle } from 'react-icons/fa';
 import { QRCodeCanvas } from 'qrcode.react';
+
+
 
 
 // Array de imagens para o slideshow
@@ -19,12 +21,18 @@ function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false); // Estado para controle do modal de pagamento
   const [selectedPayment, setSelectedPayment] = useState(''); // Estado para método de pagamento selecionado
+  const [isOpen, setIsOpen] = useState(false); // Estado para funcionalidade da lanchonete aberta ou fechada 
 
   const generatePixCode = () => {
     const totalAmount = calculateTotal();
     // Aqui você deve gerar a string do código Pix, ajustando conforme necessário
     return `00020101021129370016BR.GOV.BCB.PIX0136seu-codigo-pix${totalAmount}5204000053039865407${totalAmount}6304...`;
   };
+
+
+  // Definindo horários de abertura e fechamento
+  const openingTime = 19; // 7 PM
+  const closingTime = 23; // 23 PM
 
    
 
@@ -50,6 +58,28 @@ function Home() {
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+
+
+  useEffect(() => {
+    const checkOpeningHours = () => {
+      const currentHour = new Date().getHours();
+      if (currentHour >= openingTime && currentHour < closingTime) {
+        setIsOpen(true);  // Lanchonete está aberta
+      } else {
+        setIsOpen(false); // Lanchonete está fechada
+      }
+    };
+
+    // Verifica o estado de abertura ao carregar a página
+    checkOpeningHours();
+
+    // Opcional: Verifique o estado de abertura a cada minuto
+    const interval = setInterval(checkOpeningHours, 60000);
+
+    return () => clearInterval(interval); // Limpa o intervalo ao desmontar o componente
+  }, []);
+
+
 
   // Função para incrementar a quantidade de um item
   const incrementQuantity = (id) => {
@@ -113,16 +143,26 @@ function Home() {
     return null;
   };
 
-  // Função para lidar com a seleção do método de pagamento
-  const handlePayment = (method) => {
-    toast.success(`Pagamento com ${method} selecionado!`);
-    setCart([]); // Limpa o carrinho após a seleção do pagamento
-    setIsModalOpen(false); // Fecha o modal do carrinho
-    setIsPaymentOpen(false); // Fecha o modal de pagamento
-  };
+// Função para lidar com a seleção do método de pagamento
+const handlePayment = (method) => {
+  toast.success(`Pagamento com ${method} selecionado!`);
+  
+  // Adiciona a notificação com o tempo estimado
+  const estimatedTime = 30; // por exemplo, 30 minutos
+  toast.info(`Seu pedido será preparado em aproximadamente ${estimatedTime} minutos!`);
+  
+  setCart([]); // Limpa o carrinho após a seleção do pagamento
+  setIsModalOpen(false); // Fecha o modal do carrinho
+  setIsPaymentOpen(false); // Fecha o modal de pagamento
+};
+
 
   return (
     <>
+  
+
+
+
       <div className={tw`relative w-full h-[300px] bg-home bg-cover bg-center`}>
         {/* Slideshow */}
         <div className={tw`absolute inset-0`}>
@@ -130,14 +170,31 @@ function Home() {
         </div>
 
         {/* Texto sobreposto */}
-        <div className={tw`absolute inset-0 flex flex-col items-center justify-center text-center text-white bg-black bg-opacity-30`}>
-          <h1 className={tw`text-4xl font-bold mb-4`}>Bem Vindo ao Tasty Spot</h1>
+          <div className={tw`absolute inset-0 flex flex-col items-center justify-center text-center text-white bg-black bg-opacity-30`}>
+          <h1 className={tw`text-4xl font-bold mb-4`}>Bem Vindo ao LanchoNet</h1>
           <p className={tw`text-lg mb-6`}>Sabor irresistível sem sair de casa. Peça agora!</p>
           <a href="#order" className={tw`bg-[#FFA500] px-6 py-3 rounded-lg text-lg font-semibold hover:bg-[#FF8C00] transition duration-300`}>
             Fazer pedido!
           </a>
+
+
+                {/* Verifica se a lanchonete está aberta ou fechada */}
+          <div className={tw`flex items-center justify-center mt-4 `}>
+            {isOpen ? (
+              <div className={tw`bg-green-100 text-green-700 px-4 py-2 rounded-lg flex items-center shadow-md`}>
+                <FaCheckCircle className={tw`mr-2`} /> 
+                <span className={tw`font-semibold text-lg`}>Estamos abertos!</span>
+              </div>
+            ) : (
+              <div className={tw`bg-red-100 text-red-700 px-4 py-2 rounded-lg flex items-center shadow-md`}>
+                <FaLock className={tw`mr-2`} /> 
+                <span className={tw`font-semibold text-lg`}>Estamos fechados no momento.</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
 
       {/* Seção de pedidos */}
       <OrderSection onAddToCart={handleAddToCart} cartItems={cart} />
@@ -191,6 +248,7 @@ function Home() {
           </div>
         </div>
       )}
+      
 
       {/* Modal de pagamento */}
       {isPaymentOpen && (
