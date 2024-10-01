@@ -1,48 +1,67 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { tw } from 'twind';
-import { FaShoppingCart, FaUser, FaHeadset } from 'react-icons/fa';
-
+import { FaUser, FaHeadset } from 'react-icons/fa';
+import { AuthContext } from './AuthContext';
 
 function Header() {
-    const [isOpen, setIsOpen] = useState(false);
-    
+  const [isOpen, setIsOpen] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const { isLoggedIn, usuario, logout } = useContext(AuthContext); // Pega os valores de login e funções do contexto
+  const navigate = useNavigate();
 
-    const toggleMenu = () => setIsOpen(!isOpen);
-    
+  const toggleMenu = () => setIsOpen(!isOpen);
 
-    return (
-        <header className={tw`bg-[#FF4C4C] text-white shadow-md w-full`}>
-            <div className={tw`flex items-center justify-between p-4 container mx-auto`}>
-                {/* Logo */}
-                <Link className={tw`text-3xl font-bold hover:text-blue-400`} to="/">
-                LanchoNet
-                </Link>
+  const handleLogout = () => {
+    logout(); // Chama a função logout do contexto
+    navigate('/login');
+  };
 
-                {/* Menu hambúrguer para dispositivos móveis */}
-                <button 
-                    className={tw`lg:hidden text-2xl focus:outline-none`} 
-                    onClick={toggleMenu}
-                >
-                    {isOpen ? '✖' : '☰'}
-                </button>
+  return (
+    <header className={tw`bg-[#FF4C4C] text-white shadow-md w-full`}>
+      <div className={tw`flex items-center justify-between p-4 container mx-auto`}>
+        <Link className={tw`text-3xl font-bold hover:text-blue-400`} to="/">
+          LanchoNet
+        </Link>
 
-                {/* Navegação */}
-                <nav className={tw`lg:flex lg:space-x-8 ${isOpen ? 'block' : 'hidden'}`}>
-                
-                    <Link className={tw`text-lg hover:text-blue-400 flex items-center`} to="/login">
-                        <FaUser className={tw`mr-2`} /> {/* Ícone de usuário */}
-                    </Link>
-                    <Link className={tw`text-lg hover:text-blue-400 flex items-center`} to="/suporte">
-                        <FaHeadset className={tw`mr-2`} /> {/* Ícone de suporte */}
-                    </Link>
+        <button 
+          className={tw`lg:hidden text-2xl focus:outline-none`} 
+          onClick={toggleMenu}
+        >
+          {isOpen ? '✖' : '☰'}
+        </button>
 
-                </nav>
+        <nav className={tw`lg:flex lg:space-x-8 ${isOpen ? 'block' : 'hidden'}`}>
+          {isLoggedIn ? (
+            <div className={tw`relative`}>
+              {/* Exibe o nome do usuário */}
+              <span className={tw`cursor-pointer`} onClick={() => setShowDropdown(!showDropdown)}>
+                {`${usuario}`} {/* Exibe o nome do usuário a partir do contexto */}
+              </span>
+              {/* Menu suspenso de logout */}
+              {showDropdown && (
+                <div className={tw`absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-50`}>
+                  <button
+                    onClick={handleLogout}
+                    className={tw`block w-full text-left px-4 py-2 text-gray-700 hover:bg-[#FF4C4C] hover:text-white transition duration-300 rounded-lg`}
+                  >
+                    Sair
+                  </button>
+                </div>
+              )}
             </div>
-
-           
-        </header>
-    );
+          ) : (
+            <Link className={tw`text-lg hover:text-blue-400 flex items-center`} to="/login">
+              <FaUser className={tw`mr-2`} />
+            </Link>
+          )}
+          <Link className={tw`text-lg hover:text-blue-400 flex items-center`} to="/suporte">
+            <FaHeadset className={tw`mr-2`} /> Suporte
+          </Link>
+        </nav>
+      </div>
+    </header>
+  );
 }
 
 export default Header;

@@ -4,17 +4,23 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Support from './pages/Suporte/suporte';
 import Register from './pages/Registro/registro';
+import ProtectedRoute from './pages/protection/ProtectedRote';
+import { AuthProvider } from './Header/AuthContext';
+
 
 
 function RoutesApp(){
     return(
-        <BrowserRouter>
+        <BrowserRouter> 
+         <AuthProvider>
+
+
         <Header/>
-        <Routes>
+             <Routes>
 
-
+    
             
-            <Route path='/' element={ <Home/>}/>
+            <Route path='/' element={<ProtectedRoute> <Home/> </ProtectedRoute>}/>
             <Route path='/login' element={ <Login/>}/>
             <Route path='/registro' element={<Register/>}/>
             <Route path='/suporte' element={ <Support/> }/>
@@ -23,7 +29,7 @@ function RoutesApp(){
 
         </Routes>
         
-        
+        </AuthProvider>
         
         </BrowserRouter>
     )

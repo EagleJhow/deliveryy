@@ -4,6 +4,8 @@ import { toast } from 'react-toastify';
 import { tw } from 'twind';
 import { FaTimes, FaArrowLeft, FaCreditCard, FaMoneyBillWave, FaLock, FaCheckCircle } from 'react-icons/fa';
 import { QRCodeCanvas } from 'qrcode.react';
+import '../Home/'
+
 
 
 
@@ -145,7 +147,7 @@ function Home() {
 
 // Função para lidar com a seleção do método de pagamento
 const handlePayment = (method) => {
-  toast.success(`Pagamento com ${method} selecionado!`);
+  toast.success(`Pagamento com ${method} confirmado!`);
   
   // Adiciona a notificação com o tempo estimado
   const estimatedTime = 30; // por exemplo, 30 minutos
@@ -288,6 +290,8 @@ const handlePayment = (method) => {
           </div>
         </div>
       )}
+
+      
     </>
   );
 }

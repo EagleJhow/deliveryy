@@ -2,7 +2,7 @@ import RoutesApp from "./routes";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { setup, tw } from 'twind';
-
+import Footer from "./Footer/Footer";
 
 // Configuração do Twind (caso queira personalizar)
 setup({
@@ -17,15 +17,16 @@ setup({
 });
 
 function App() {
-  return (
-    <div className={tw`text-center min-h-screen bg-primary flex flex-col justify-center items-center`}>
+  return (                      
+    <div className={tw`flex flex-col min-h-screen bg-primary`}>
       <ToastContainer autoClose={3000} />
-      <RoutesApp />
-      
-      <div className={tw`flex justify-center items-center min-h-screen bg-cover bg-center`}>
-        {/* Outros componentes ou conteúdo aqui */}
-        
+      <div className={tw`flex-grow flex flex-col justify-center`}>
+        {/* Centraliza o texto */}
+        <div className={tw`text-center`}>
+          <RoutesApp />
+        </div>
       </div>
+      <Footer />
     </div>
   );
 }

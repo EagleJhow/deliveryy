@@ -1,17 +1,36 @@
 import { useState } from "react";
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
 import { tw } from 'twind';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Importa o useNavigate para redirecionamento
+import { toast } from 'react-toastify'; // Para exibir notificações
+import { registerUser } from '../../api/api'; // Função para registrar usuário
 
 // Componente de Registro
 const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); // Estado para controle de carregamento
+  const navigate = useNavigate(); // Hook para redirecionamento
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Dados de Registro:", { username, email, password });
+    setLoading(true); // Inicia o estado de carregamento
+
+    try {
+      // Faz a requisição para registrar o usuário
+      await registerUser(username, email, password);
+
+
+      // Exibe mensagem de sucesso e redireciona
+      toast.success('Usuário registrado com sucesso!');
+      navigate('/login'); // Redireciona para a página de login após o registro
+    } catch (error) {
+      // Exibe mensagem de erro
+      toast.error('Erro ao registrar. Verifique os dados inseridos.');
+    } finally {
+      setLoading(false); // Finaliza o carregamento
+    }
   };
 
   return (
@@ -58,10 +77,12 @@ const Register = () => {
               Aceito os termos de serviço
             </label>
           </div>
-          <button 
-            type="submit" 
-            className={tw`w-full py-2 bg-[#FFA500] text-white font-semibold rounded-md hover:bg-[#FF8C00] transition duration-300`}>
-            Registrar
+          <button
+            type="submit"
+            className={tw`w-full py-2 bg-[#FFA500] text-white font-semibold rounded-md hover:bg-[#FF8C00] transition duration-300`}
+            disabled={loading} // Desabilita o botão durante o carregamento
+          >
+            {loading ? 'Carregando...' : 'Registrar'}
           </button>
           <div className={tw`mt-4 text-center`}>
             <p className={tw`text-gray-600`}>

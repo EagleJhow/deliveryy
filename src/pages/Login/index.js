@@ -1,48 +1,63 @@
-import { useState } from "react";
+import React, { useState, useContext } from 'react';
 import { FaUser, FaLock } from "react-icons/fa";
 import { tw } from 'twind';
-import { Link } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-// Usuários fictícios para autenticação
-const users = {
-  "lanchonet@admin.com": "lanchonet123", // Usuario Admin
-  "jhonatan@gmail.com": "senha123", // Usuario Jhonatan
-  "ryan@gmail.com": "senha123", // Usuario Ryan
-};
+import { useNavigate } from 'react-router-dom'; // Hook para navegação
+import axios from 'axios'; // Adiciona o axios para requisições HTTP
+import { toast } from 'react-toastify';
+import { AuthContext } from '../../Header/AuthContext';
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [loading, setLoading] = useState(false); // Estado de carregamento
+  const navigate = useNavigate(); // Hook de navegação
+  const { login } = useContext(AuthContext); // Pega a função login do contexto
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Verifica se o usuário e a senha estão corretos
-    if (users[username] === password) {
-      console.log("Login bem-sucedido:", { username });
-      setError("");
-      toast.success(`${username} logado com sucesso!`); // Notificação de sucesso
-      // Redirecionar ou fazer algo após o login bem-sucedido
-    } else {
-      setError("Usuário ou senha inválidos");
+  // Aqui está o código de login com axios
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await axios.post('http://localhost:4000/login', {
+        email: email,
+        senha: senha,
+      });
+
+      const { token, usuario } = response.data;
+
+    
+
+      // Usa a função login do contexto para atualizar o estado de autenticação
+      login(token, usuario);
+
+      toast.success('Login realizado com sucesso!');
+
+      // Redireciona o usuário para a página principal
+      navigate('/');
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        toast.error('Usuário não registrado. Verifique suas credenciais.');
+      } else {
+        toast.error('Erro ao realizar login.');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className={tw`inset-0 flex items-center justify-center min-h-screen bg-white z-10`}>
-      <ToastContainer />
       <div className={tw`bg-gray-100 p-8 rounded-lg w-full max-w-md z-20`}>
         <h1 className={tw`text-2xl font-bold mb-6 text-center text-gray-700`}>Acesse sua conta</h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleLogin}>
           <div className={tw`relative mb-4`}>
             <input
               type="text"
               placeholder="E-mail"
               required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className={tw`w-full p-3 border border-gray-300 rounded-md text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500`}
             />
             <FaUser className={tw`absolute top-3 right-3 text-gray-500`} />
@@ -52,28 +67,29 @@ const Login = () => {
               type="password"
               placeholder="Senha"
               required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
               className={tw`w-full p-3 border border-gray-300 rounded-md text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500`}
             />
             <FaLock className={tw`absolute top-3 right-3 text-gray-500`} />
           </div>
-          {error && <div className={tw`text-red-500 mb-4 text-center`}>{error}</div>}
           <div className={tw`flex items-center justify-between mb-6`}>
             <label className={tw`flex items-center mr-4`}>
               <input type="checkbox" className={tw`mr-2`} />
               Lembre de mim
             </label>
-            <a href="#" className={tw`text-blue-500 hover:underline`}>Esqueceu sua senha?</a>
+            <a className={tw`text-blue-500 hover:underline`}>Esqueceu sua senha?</a>
           </div>
           <button 
             type="submit" 
-            className={tw`w-full py-2 bg-[#FFA500] text-white font-semibold rounded-md hover:bg-[#FF8C00] transition duration-300`}>
-            Login
+            className={tw`w-full py-2 bg-[#FFA500] text-white font-semibold rounded-md hover:bg-[#FF8C00] transition duration-300`}
+            disabled={loading}
+          >
+            {loading ? 'Carregando...' : 'Login'}
           </button>
           <div className={tw`mt-4 text-center`}>
             <p className={tw`text-gray-600`}>
-              Não tem uma conta? <Link to="/registro" className={tw`text-blue-500 hover:underline`}>Registar</Link>
+              Não tem uma conta? <a href="/registro" className={tw`text-blue-500 hover:underline`}>Registrar</a>
             </p>
           </div>
         </form>
