@@ -1,19 +1,18 @@
 import React, { useState, useContext } from 'react';
 import { FaUser, FaLock } from "react-icons/fa";
 import { tw } from 'twind';
-import { useNavigate } from 'react-router-dom'; // Hook para navegação
-import axios from 'axios'; // Adiciona o axios para requisições HTTP
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../../Header/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [loading, setLoading] = useState(false); // Estado de carregamento
-  const navigate = useNavigate(); // Hook de navegação
-  const { login } = useContext(AuthContext); // Pega a função login do contexto
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
-  // Aqui está o código de login com axios
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -26,14 +25,14 @@ const Login = () => {
 
       const { token, usuario } = response.data;
 
-    
+      if (usuario) {
+        // Certifique-se que 'usuario' está sendo retornado da API corretamente
+        login(token, usuario); // Aqui você está armazenando o 'usuario' no contexto
+        toast.success(`Login realizado com sucesso! Bem-vindo, ${usuario.nome}`); // Exiba o nome do usuário
+      } else {
+        throw new Error("Dados de usuário não retornados.");
+      }
 
-      // Usa a função login do contexto para atualizar o estado de autenticação
-      login(token, usuario);
-
-      toast.success('Login realizado com sucesso!');
-
-      // Redireciona o usuário para a página principal
       navigate('/');
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -48,7 +47,7 @@ const Login = () => {
 
   return (
     <div className={tw`inset-0 flex items-center justify-center min-h-screen bg-white z-10`}>
-      <div className={tw`bg-gray-100 p-8 rounded-lg w-full max-w-md z-20`}>
+      <div className={tw`bg-gray-200 p-8 rounded-lg w-full max-w-md z-20`}>
         <h1 className={tw`text-2xl font-bold mb-6 text-center text-gray-700`}>Acesse sua conta</h1>
         <form onSubmit={handleLogin}>
           <div className={tw`relative mb-4`}>
@@ -78,7 +77,7 @@ const Login = () => {
               <input type="checkbox" className={tw`mr-2`} />
               Lembre de mim
             </label>
-            <a className={tw`text-blue-500 hover:underline`}>Esqueceu sua senha?</a>
+            <a href="#" className={tw`text-blue-500 hover:underline`}>Esqueceu sua senha?</a>
           </div>
           <button 
             type="submit" 

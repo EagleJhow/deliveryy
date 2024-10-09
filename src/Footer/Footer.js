@@ -14,9 +14,6 @@ const Footer = () => {
           <h4 className={tw`font-bold mb-2`}>Links Rápidos</h4>
           <ul className={tw`list-none p-0`}>
             <li className={tw`mb-1`}>
-              <a href="#sobre" className={tw`text-white hover:underline`}>Sobre nós</a>
-            </li>
-            <li className={tw`mb-1`}>
               <a href="#order" className={tw`text-white hover:underline`}>Cardápio</a>
             </li>
             <li className={tw`mb-1`}>

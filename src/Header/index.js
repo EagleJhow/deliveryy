@@ -31,12 +31,15 @@ function Header() {
           {isOpen ? '✖' : '☰'}
         </button>
 
+
+
+
         <nav className={tw`lg:flex lg:space-x-8 ${isOpen ? 'block' : 'hidden'}`}>
           {isLoggedIn ? (
             <div className={tw`relative`}>
               {/* Exibe o nome do usuário */}
               <span className={tw`cursor-pointer`} onClick={() => setShowDropdown(!showDropdown)}>
-                {`${usuario}`} {/* Exibe o nome do usuário a partir do contexto */}
+              {usuario?.nome || usuario?.email || 'Usuário'} {/* Exibe a propriedade correta do usuário */}
               </span>
               {/* Menu suspenso de logout */}
               {showDropdown && (

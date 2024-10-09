@@ -35,7 +35,7 @@ const Register = () => {
 
   return (
     <div className={tw`inset-0 flex items-center justify-center min-h-screen bg-white z-10`}>
-      <div className={tw`bg-gray-100 p-8 rounded-lg w-full max-w-md z-20`}> {/* Mantendo o mesmo max-w-md para garantir a largura */}
+      <div className={tw`bg-gray-200 p-8 rounded-lg w-full max-w-md z-20`}> {/* Mantendo o mesmo max-w-md para garantir a largura */}
         <h1 className={tw`text-2xl font-bold mb-6 text-center text-gray-700`}>Crie sua conta</h1>
         <form onSubmit={handleSubmit}>
           <div className={tw`relative mb-4`}>
